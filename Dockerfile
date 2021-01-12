@@ -1,10 +1,7 @@
 FROM innovanon/xorg-base:latest as builder-01
 COPY --from=innovanon/util-macros /tmp/util-macros.txz /tmp/
 COPY --from=innovanon/xorgproto   /tmp/xorgproto.txz   /tmp/
-RUN cat   /tmp/*.txz  \
-  | tar Jxf - -i -C / \
- && rm -v /tmp/*.txz  \
- && ldconfig
+RUN extract.sh
 
 ARG LFS=/mnt/lfs
 WORKDIR $LFS/sources
@@ -22,4 +19,7 @@ RUN sleep 31                                                                    
  && tar acf        ../libXau.txz .                                                     \
  && cd ..                                                                              \
  && rm -rf       /tmp/libXau
+
+FROM scratch as final
+COPY --from=builder-01 /tmp/libXau.txz /tmp/
 
