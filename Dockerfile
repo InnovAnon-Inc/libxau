@@ -3,7 +3,8 @@ COPY --from=innovanon/util-macros /tmp/util-macros.txz /tmp/
 COPY --from=innovanon/xorgproto   /tmp/xorgproto.txz   /tmp/
 RUN cat   /tmp/*.txz  \
   | tar Jxf - -i -C / \
- && rm -v /tmp/*.txz
+ && rm -v /tmp/*.txz  \
+ && ldconfig
 
 ARG LFS=/mnt/lfs
 WORKDIR $LFS/sources
@@ -17,6 +18,7 @@ RUN sleep 31                                                                    
  && make DESTDIR=/tmp/libXau install                                                   \
  && rm -rf                                                                  libXau     \
  && cd           /tmp/libXau                                                           \
+ && strip.sh .                                                                         \
  && tar acf        ../libXau.txz .                                                     \
  && cd ..                                                                              \
  && rm -rf       /tmp/libXau
