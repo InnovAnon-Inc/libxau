@@ -1,4 +1,5 @@
 FROM innovanon/xorg-base:latest as builder-01
+USER root
 COPY --from=innovanon/util-macros /tmp/util-macros.txz /tmp/
 COPY --from=innovanon/xorgproto   /tmp/xorgproto.txz   /tmp/
 RUN extract.sh
@@ -16,7 +17,7 @@ RUN sleep 31                                                                    
  && rm -rf                                                                  libXau     \
  && cd           /tmp/libXau                                                           \
  && strip.sh .                                                                         \
- && tar acf        ../libXau.txz .                                                     \
+ && tar  pacf        ../libXau.txz .                                                     \
  && cd ..                                                                              \
  && rm -rf       /tmp/libXau
 
